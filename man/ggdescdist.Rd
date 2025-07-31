@@ -11,30 +11,36 @@ ggdescdist(
   method = "unbiased",
   plot = TRUE,
   print = TRUE,
-  color = "#e15759",
-  shape = 16,
-  color_boot = "#4e79a7"
+  color_empirical = "#e15759",
+  shape_empirical = 16,
+  color_bootstrap = "#4e79a7",
+  shape_bootstrap = 1,
+  themeless = FALSE
 )
 }
 \arguments{
 \item{data}{A numeric vector.}
 
-\item{discrete}{If `TRUE`, the distribution is considered as discrete.}
+\item{discrete}{logical. If `TRUE`, the distribution is considered as discrete.}
 
-\item{boot}{If not `NULL`, boot values of skewness and kurtosis are plotted from bootstrap samples of data.
+\item{boot}{integer. If not `NULL`, boot values of skewness and kurtosis are plotted from bootstrap samples of data.
 `boot` must be fixed in this case to an integer above 10.}
 
-\item{method}{`"unbiased"` for unbiased estimated values of statistics or `"sample"` for sample values.}
+\item{method}{character. `"unbiased"` for unbiased estimated values of statistics or `"sample"` for sample values.}
 
-\item{plot}{If `FALSE`, the skewness-kurtosis plot is not plotted.}
+\item{plot}{logical (default: `TRUE`). If `FALSE`, the skewness-kurtosis plot is not plotted.}
 
-\item{print}{If `FALSE`, the descriptive parameters computed are not printed.}
+\item{print}{logical (default: `TRUE`). If `FALSE`, the descriptive parameters computed are not printed.}
 
-\item{color}{Color used for the observed point on the skewness-kurtosis plot.}
+\item{color_empirical}{character. Color used for the empirical (observed) data point on the skewness-kurtosis plot.}
 
-\item{shape}{Plotting character used for the observed point on the skewness-kurtosis plot.}
+\item{shape_empirical}{integer. Plotting character used for the empirical (observed) point on the skewness-kurtosis plot.}
 
-\item{color_boot}{Color used for bootstrap sample of points on the skewness-kurtosis plot.}
+\item{color_bootstrap}{character. Color used for bootstrap samples on the skewness-kurtosis plot if `boot = TRUE`.}
+
+\item{shape_bootstrap}{integer. Plotting character used for bootstrap samples on the skewness-kurtosis plot if `boot = TRUE`.}
+
+\item{themeless}{logical (default: `FALSE`). Default to `ggplot2` theme, omitting custom theme elements.}
 }
 \value{
 For `print = TRUE`, a list with 7 components (min, max, median, mean, sd, skewness, kurtosis, method), and/or

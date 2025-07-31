@@ -1,0 +1,55 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# ggdescdist
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+This is a simple package with a simple goal: Produce a Cullen and Frey skewness-kurtosis plot using `ggplot2`. The underlying code is adapted from the `fitdistrplus` package, where the `descdist` function provides skewness-kurtosis plot in base R. The `ggplot2` version attempts to recreate the look and function of that plot, but with more elegant theme elements. The beauty of `ggplot2` is that the resulting plot is fully customizable. If desired, all theme elements can be turned off, producing a plot using the default `ggplot2` theme.
+
+## Installation
+
+You can install the development version of `ggdescdist` from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("mwaak/ggdescdist")
+```
+
+## Example
+
+Note that `fitdistrplus` is not a dependency for this package. If you wish to compare this plot to the original, then `fitdistrplus` must be installed separately.
+
+```{r example}
+library(ggdescdist)
+
+# For reproducible results
+set.seed(42)
+
+# Generate dataset
+x <- rnorm(1000, mean = 27, sd = 3)
+
+# Skewness-kurtosis plot without bootstrapping
+ggdescdist(x)
+
+# Skewness-kurtosis plot bootstrapping
+ggdescdist(x, boot = 20)
+
+# Compare to the original plot ("fitdistrplus" must be installed)
+if ("fitdistrplus" %in% installed.packages()){
+  fitdistrplus::descdist(x)
+}
+```

@@ -7,6 +7,14 @@
 \description{
 `ggdescdist` recreates the Cullen and Frey skewnes-kurtosis plot from the `fitdistrplus` package using `ggplot2`, providing a tidy, customizable way to visualize empirical skewness and kurtosis against theoretical distributions. Great for exploring candidate distributions — now with prettier plots.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/mwaak/ggdescdist}
+  \item Report bugs at \url{https://github.com/mwaak/ggdescdist/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Michael B. Waak \email{michael.waak@sintef.no} (\href{https://orcid.org/0000-0002-1637-3608}{ORCID})
 

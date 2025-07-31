@@ -6,15 +6,17 @@
 #' package (Delignette-Muller and Dutang, 2015), but the output is a `ggplot2` object.
 #'
 #' @param data A numeric vector.
-#' @param discrete If `TRUE`, the distribution is considered as discrete.
-#' @param boot If not `NULL`, boot values of skewness and kurtosis are plotted from bootstrap samples of data.
+#' @param discrete logical. If `TRUE`, the distribution is considered as discrete.
+#' @param boot integer. If not `NULL`, boot values of skewness and kurtosis are plotted from bootstrap samples of data.
 #' `boot` must be fixed in this case to an integer above 10.
-#' @param method `"unbiased"` for unbiased estimated values of statistics or `"sample"` for sample values.
-#' @param plot If `FALSE`, the skewness-kurtosis plot is not plotted.
-#' @param print If `FALSE`, the descriptive parameters computed are not printed.
-#' @param color Color used for the observed point on the skewness-kurtosis plot.
-#' @param shape Plotting character used for the observed point on the skewness-kurtosis plot.
-#' @param color_boot Color used for bootstrap sample of points on the skewness-kurtosis plot.
+#' @param method character. `"unbiased"` for unbiased estimated values of statistics or `"sample"` for sample values.
+#' @param plot logical (default: `TRUE`). If `FALSE`, the skewness-kurtosis plot is not plotted.
+#' @param print logical (default: `TRUE`). If `FALSE`, the descriptive parameters computed are not printed.
+#' @param color_empirical character. Color used for the empirical (observed) data point on the skewness-kurtosis plot.
+#' @param shape_empirical integer. Plotting character used for the empirical (observed) point on the skewness-kurtosis plot.
+#' @param color_bootstrap character. Color used for bootstrap samples on the skewness-kurtosis plot if `boot = TRUE`.
+#' @param shape_bootstrap integer. Plotting character used for bootstrap samples on the skewness-kurtosis plot if `boot = TRUE`.
+#' @param themeless logical (default: `FALSE`). Default to `ggplot2` theme, omitting custom theme elements.
 #'
 #' @importFrom rlang .data
 #' @export
@@ -85,9 +87,11 @@ ggdescdist <- function(data,
                        method = "unbiased",
                        plot = TRUE,
                        print = TRUE,
-                       color = "#e15759",
-                       shape = 16,
-                       color_boot = "#4e79a7") {
+                       color_empirical = "#e15759",
+                       shape_empirical = 16,
+                       color_bootstrap = "#4e79a7",
+                       shape_bootstrap = 1,
+                       themeless = FALSE) {
 
   if (missing(data) || !is.vector(data, mode = "numeric"))
     stop("data must be a numeric vector")
@@ -187,39 +191,43 @@ ggdescdist <- function(data,
         minor_breaks = seq(from = 0, to = ymax, by = 1),
         labels = as.character(kurtmax - seq(from = 0, to = ymax, by = 2)),
         guide = ggplot2::guide_axis(minor.ticks = TRUE)
-      ) +
-      ggplot2::theme_bw() +
-      ggplot2::theme(
-        axis.text = ggplot2::element_text(size = 8),
-        axis.title = ggplot2::element_text(face = "bold", size = 11),
-        legend.background = ggplot2::element_blank(),
-        legend.box.background = ggplot2::element_rect(fill = "white", color = NA),
-        legend.direction = "vertical",
-        legend.key = ggplot2::element_rect(fill = NA, color = NA),
-        legend.position = "right",
-        legend.title = ggplot2::element_text(face = "bold", size = 11),
-        legend.text = ggplot2::element_text(
-          size = 10,
-          hjust = 0,
-          margin = ggplot2::margin(
-            l = 3,
-            r = 10,
-            b = 3,
-            t = 3,
-            unit = "pt"
-          )
-        ),
-        panel.grid = ggplot2::element_blank(),
-        plot.title = ggplot2::element_text(face = "bold", size = 11),
-        plot.background = ggplot2::element_blank(),
-        plot.caption = ggplot2::element_text(
-          hjust = 1,
-          size = 8,
-          face = "plain"
-        ),
-        plot.caption.position = "plot",
-        strip.text = ggplot2::element_text(face = "bold", size = 11)
       )
+
+    if (themeless == FALSE) {
+      plot <- plot +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          axis.text = ggplot2::element_text(size = 8),
+          axis.title = ggplot2::element_text(face = "bold", size = 11),
+          legend.background = ggplot2::element_blank(),
+          legend.box.background = ggplot2::element_rect(fill = "white", color = NA),
+          legend.direction = "vertical",
+          legend.key = ggplot2::element_rect(fill = NA, color = NA),
+          legend.position = "right",
+          legend.title = ggplot2::element_text(face = "bold", size = 11),
+          legend.text = ggplot2::element_text(
+            size = 10,
+            hjust = 0,
+            margin = ggplot2::margin(
+              l = 3,
+              r = 10,
+              b = 3,
+              t = 3,
+              unit = "pt"
+            )
+          ),
+          panel.grid = ggplot2::element_blank(),
+          plot.title = ggplot2::element_text(face = "bold", size = 11),
+          plot.background = ggplot2::element_blank(),
+          plot.caption = ggplot2::element_text(
+            hjust = 1,
+            size = 8,
+            face = "plain"
+          ),
+          plot.caption.position = "plot",
+          strip.text = ggplot2::element_text(face = "bold", size = 11)
+        )
+    }
 
     if (!discrete) {
       p <- exp(-100)
@@ -239,6 +247,11 @@ ggdescdist <- function(data,
                                             2) / (p * q * (p + q + 2) *
                                                     (p + q + 3)))
 
+      # Beta
+      df_beta <- data.frame(id = 1,
+                            s2 = c(s2a, s2b),
+                            y = c(ya, yb))
+
       # Gamma
       df_gamma <- data.frame(shape = exp(seq(-100, 100, 0.1)))
       df_gamma$s2 <- 4 / df_gamma$shape
@@ -254,11 +267,7 @@ ggdescdist <- function(data,
 
       plot <- plot +
         ggplot2::geom_polygon(
-          data = data.frame(
-            id = 1,
-            s2 = c(s2a, s2b),
-            y = c(ya, yb)
-          ),
+          data = df_beta,
           inherit.aes = FALSE,
           ggplot2::aes(
             x = .data$s2,
@@ -301,6 +310,11 @@ ggdescdist <- function(data,
       s2b <- (2 - p) ^ 2 / (r * (1 - p))
       yb <- kurtmax - (3 + 6 / r + p ^ 2 / (r * (1 - p)))
 
+      # Negative binomial
+      df_negative_binomial <- data.frame(id = 1,
+                                         s2 = c(s2a, s2b),
+                                         y = c(ya, yb))
+
       # Poisson
       df_poisson <- data.frame(lambda <- exp(seq(-100, 100, 0.1)))
       df_poisson$s2 <- 1 / df_poisson$lambda
@@ -309,11 +323,7 @@ ggdescdist <- function(data,
 
       plot <- plot +
         ggplot2::geom_polygon(
-          data = data.frame(
-            id = 1,
-            s2 = c(s2a, s2b),
-            y = c(ya, yb)
-          ),
+          data = df_negative_binomial,
           inherit.aes = FALSE,
           ggplot2::aes(
             x = .data$s2,
@@ -418,8 +428,8 @@ ggdescdist <- function(data,
           "beta"
         ),
         values = c(
-          "empirical" = shape,
-          "bootstrap" = 1,
+          "empirical" = shape_empirical,
+          "bootstrap" = shape_bootstrap,
           "normal" = 8,
           "uniform" = 2,
           "exponential" = 7,
@@ -478,8 +488,8 @@ ggdescdist <- function(data,
           "beta"
         ),
         values = c(
-          "empirical" = color,
-          "bootstrap" = color_boot,
+          "empirical" = color_empirical,
+          "bootstrap" = color_bootstrap,
           "normal" = "#333333",
           "uniform" = "#333333",
           "exponential" = "#333333",
@@ -514,14 +524,14 @@ ggdescdist <- function(data,
         linetype = ggplot2::guide_legend(order = 3, title = NULL)
       ) +
       ggplot2::theme(
-        legend.spacing.y = ggplot2::unit(0, "pt"),
         legend.margin = ggplot2::margin(
           t = 0,
           r = 5,
           b = 0,
           l = 5,
           unit = "pt"
-        )
+        ),
+        legend.spacing.y = ggplot2::unit(0, "pt")
       )
 
     print(plot)
