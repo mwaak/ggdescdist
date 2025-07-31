@@ -10,7 +10,7 @@ Authors@R: c(
       comment = c(ORCID = "0000-0002-1637-3608")
     )
   )
-Description: `ggdescdist` recreates the classic Cullen and Frey skewnes-kurtosis plot from the `fitdistrplus` package 
+Description: `ggdescdist` recreates the Cullen and Frey skewnes-kurtosis plot from the `fitdistrplus` package 
   using `ggplot2`, providing a tidy, customizable way to visualize empirical skewness and kurtosis 
   against theoretical distributions. Great for exploring candidate distributions — now with prettier plots.
 License: GPL (>= 3)
