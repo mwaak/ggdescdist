@@ -10,11 +10,11 @@
 This is a simple package with a simple goal: Produce a Cullen and Frey
 skewness-kurtosis plot using `ggplot2`. The underlying code is adapted
 from the `fitdistrplus` package, where the `descdist` function provides
-skewness-kurtosis plot in base R. The `ggplot2` version attempts to
-recreate the look and function of that plot, but with more elegant theme
-elements. The beauty of `ggplot2` is that the resulting plot is fully
-customizable. If desired, all theme elements can be turned off,
-producing a plot using the default `ggplot2` theme.
+a skewness-kurtosis plot using base R graphics. The `ggplot2` version
+attempts to recreate the look and function of that plot, but with more
+elegant theme elements. The beauty of `ggplot2` is that the resulting
+plot is fully customizable. If desired, all theme elements can be turned
+off, producing a plot using the default `ggplot2` theme.
 
 ## Installation
 
@@ -32,20 +32,22 @@ Note that `fitdistrplus` is not a dependency for this package. If you
 wish to compare this plot to the original, then `fitdistrplus` must be
 installed separately.
 
+First, create a simple normal distribution.
+
 ``` r
 library(ggdescdist)
 
-# For reproducible results
 set.seed(42)
-
-# Generate dataset
 x <- rnorm(1000, mean = 27, sd = 3)
+```
 
-# Skewness-kurtosis plot without bootstrapping
+Default skewness-kurtosis plot without bootstrapping:
+
+``` r
 ggdescdist(x)
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example_no_boot-1.png" width="100%" />
 
     #> $min
     #> [1] 16.88478
@@ -74,10 +76,13 @@ ggdescdist(x)
     #> attr(,"class")
     #> [1] "descdist"
 
-    # Skewness-kurtosis plot bootstrapping
-    ggdescdist(x, boot = 20)
+Skewness-kurtosis plot with bootstrapping:
 
-<img src="man/figures/README-example-2.png" width="100%" />
+``` r
+ggdescdist(x, boot = 20)
+```
+
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
     #> $min
     #> [1] 16.88478
@@ -106,12 +111,16 @@ ggdescdist(x)
     #> attr(,"class")
     #> [1] "descdist"
 
-    # Compare to the original plot ("fitdistrplus" must be installed)
-    if ("fitdistrplus" %in% installed.packages()){
-      fitdistrplus::descdist(x)
-    }
+Compare to the original skewness-kurtosis plot (“fitdistrplus” must be
+installed):
 
-<img src="man/figures/README-example-3.png" width="100%" />
+``` r
+if ("fitdistrplus" %in% installed.packages()){
+  fitdistrplus::descdist(x)
+}
+```
+
+<img src="man/figures/README-comparison-1.png" width="100%" />
 
     #> summary statistics
     #> ------
