@@ -1,0 +1,22 @@
+Package: ggdescdist
+Type: Package
+Title: ggdescdist: Visual assessment of skewness and kurtosis with 'ggplot2'
+Version: 1.0.0
+Authors@R: c(
+    person(
+      "Michael B.", "Waak",
+      email = "michael.waak@sintef.no",
+      role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0002-1637-3608")
+    )
+  )
+Description: `ggdescdist` recreates the classic Cullen and Frey skewnes-kurtosis plot from the `fitdistrplus` package 
+  using `ggplot2`, providing a tidy, customizable way to visualize empirical skewness and kurtosis 
+  against theoretical distributions. Great for exploring candidate distributions — now with prettier plots.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
+Imports: 
+    ggplot2,
+    stats
