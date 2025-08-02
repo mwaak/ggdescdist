@@ -49,33 +49,6 @@ ggdescdist(x)
 
 <img src="man/figures/README-example_no_boot-1.png" width="100%" />
 
-    #> $min
-    #> [1] 16.88478
-    #> 
-    #> $max
-    #> [1] 37.48591
-    #> 
-    #> $median
-    #> [1] 26.9606
-    #> 
-    #> $mean
-    #> [1] 26.92253
-    #> 
-    #> $sd
-    #> [1] 3.007564
-    #> 
-    #> $skewness
-    #> [1] -0.00377292
-    #> 
-    #> $kurtosis
-    #> [1] 3.141525
-    #> 
-    #> $method
-    #> [1] "unbiased"
-    #> 
-    #> attr(,"class")
-    #> [1] "descdist"
-
 Skewness-kurtosis plot with bootstrapping:
 
 ``` r
@@ -83,33 +56,6 @@ ggdescdist(x, boot = 20)
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
-
-    #> $min
-    #> [1] 16.88478
-    #> 
-    #> $max
-    #> [1] 37.48591
-    #> 
-    #> $median
-    #> [1] 26.9606
-    #> 
-    #> $mean
-    #> [1] 26.92253
-    #> 
-    #> $sd
-    #> [1] 3.007564
-    #> 
-    #> $skewness
-    #> [1] -0.00377292
-    #> 
-    #> $kurtosis
-    #> [1] 3.141525
-    #> 
-    #> $method
-    #> [1] "unbiased"
-    #> 
-    #> attr(,"class")
-    #> [1] "descdist"
 
 Compare to the original skewness-kurtosis plot (“fitdistrplus” must be
 installed):

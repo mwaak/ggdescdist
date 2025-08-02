@@ -9,8 +9,6 @@ ggdescdist(
   discrete = FALSE,
   boot = NULL,
   method = "unbiased",
-  plot = TRUE,
-  print = TRUE,
   color_empirical = "#e15759",
   shape_empirical = 16,
   color_bootstrap = "#4e79a7",
@@ -26,11 +24,7 @@ ggdescdist(
 \item{boot}{integer. If not `NULL`, boot values of skewness and kurtosis are plotted from bootstrap samples of data.
 `boot` must be fixed in this case to an integer above 10.}
 
-\item{method}{character. `"unbiased"` for unbiased estimated values of statistics or `"sample"` for sample values.}
-
-\item{plot}{logical (default: `TRUE`). If `FALSE`, the skewness-kurtosis plot is not plotted.}
-
-\item{print}{logical (default: `TRUE`). If `FALSE`, the descriptive parameters computed are not printed.}
+\item{method}{character. `"unbiased"` for unbiased estimated values of statistics (default) or `"sample"` for sample values.}
 
 \item{color_empirical}{character. Color used for the empirical (observed) data point on the skewness-kurtosis plot.}
 
@@ -43,11 +37,10 @@ ggdescdist(
 \item{themeless}{logical (default: `FALSE`). Default to `ggplot2` theme, omitting custom theme elements.}
 }
 \value{
-For `print = TRUE`, a list with 7 components (min, max, median, mean, sd, skewness, kurtosis, method), and/or
- for `plot = TRUE`, a skewness-kurtosis plot as `ggplot2` object.
+A skewness-kurtosis plot as `ggplot2` object.
 }
 \description{
-This function prints summary statistics and produces a Cullen and Frey skewness-kurtosis plot to assess the
+This function produces a Cullen and Frey skewness-kurtosis plot to assess the
 shape of an empirical distribution via skewness and kurtosis. The code is based on `descdist` from the `fitdistrplus`
 package (Delignette-Muller and Dutang, 2015), but the output is a `ggplot2` object.
 }
@@ -55,10 +48,6 @@ package (Delignette-Muller and Dutang, 2015), but the output is a `ggplot2` obje
 This function was based on code from `fitdistrplus` v1.2-1 (as of 2024-08-29). Please cite `fitdistrplus` if
 using this function; see `citation("fitdistrplus")` (`fitdistrplus` must be installed). The original code was
 optimized via ChatGPT by OpenAI and then manually configured to use `ggplot2` for the skewness-kurtosis plot.
-
-Summary statistics include the minimum, maximum, median, mean, sample standard
-deviation, and either sample-based or (by default) unbiased estimates of
-skewness and Pearson’s kurtosis (Sokal and Rohlf, 1995).
 
 The Cullen and Frey skewness-kurtosis plot (Cullen and Frey, 1999) displays the empirical skewness
 and kurtosis, along with reference values for common theoretical distributions,

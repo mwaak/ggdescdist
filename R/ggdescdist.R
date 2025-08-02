@@ -1,7 +1,7 @@
 #' Cullen and Frey Plot for Empirical Distribution Diagnostics
 #'
 #' @description
-#' This function prints summary statistics and produces a Cullen and Frey skewness-kurtosis plot to assess the
+#' This function produces a Cullen and Frey skewness-kurtosis plot to assess the
 #' shape of an empirical distribution via skewness and kurtosis. The code is based on `descdist` from the `fitdistrplus`
 #' package (Delignette-Muller and Dutang, 2015), but the output is a `ggplot2` object.
 #'
@@ -9,9 +9,7 @@
 #' @param discrete logical. If `TRUE`, the distribution is considered as discrete.
 #' @param boot integer. If not `NULL`, boot values of skewness and kurtosis are plotted from bootstrap samples of data.
 #' `boot` must be fixed in this case to an integer above 10.
-#' @param method character. `"unbiased"` for unbiased estimated values of statistics or `"sample"` for sample values.
-#' @param plot logical (default: `TRUE`). If `FALSE`, the skewness-kurtosis plot is not plotted.
-#' @param print logical (default: `TRUE`). If `FALSE`, the descriptive parameters computed are not printed.
+#' @param method character. `"unbiased"` for unbiased estimated values of statistics (default) or `"sample"` for sample values.
 #' @param color_empirical character. Color used for the empirical (observed) data point on the skewness-kurtosis plot.
 #' @param shape_empirical integer. Plotting character used for the empirical (observed) point on the skewness-kurtosis plot.
 #' @param color_bootstrap character. Color used for bootstrap samples on the skewness-kurtosis plot if `boot = TRUE`.
@@ -25,10 +23,6 @@
 #' This function was based on code from `fitdistrplus` v1.2-1 (as of 2024-08-29). Please cite `fitdistrplus` if
 #' using this function; see `citation("fitdistrplus")` (`fitdistrplus` must be installed). The original code was
 #' optimized via ChatGPT by OpenAI and then manually configured to use `ggplot2` for the skewness-kurtosis plot.
-#'
-#' Summary statistics include the minimum, maximum, median, mean, sample standard
-#' deviation, and either sample-based or (by default) unbiased estimates of
-#' skewness and Pearson’s kurtosis (Sokal and Rohlf, 1995).
 #'
 #' The Cullen and Frey skewness-kurtosis plot (Cullen and Frey, 1999) displays the empirical skewness
 #' and kurtosis, along with reference values for common theoretical distributions,
@@ -50,8 +44,7 @@
 #' (as a limiting distribution). If `discrete = FALSE`, it includes uniform, normal,
 #' logistic, lognormal, beta, and gamma distributions.
 #'
-#' @returns For `print = TRUE`, a list with 7 components (min, max, median, mean, sd, skewness, kurtosis, method), and/or
-#'  for `plot = TRUE`, a skewness-kurtosis plot as `ggplot2` object.
+#' @returns A skewness-kurtosis plot as `ggplot2` object.
 #'
 #' @references
 #' Cullen AC and Frey HC (1999), Probabilistic techniques in exposure assessment. Plenum Press, United States, pp. 81-159.
@@ -85,8 +78,6 @@ ggdescdist <- function(data,
                        discrete = FALSE,
                        boot = NULL,
                        method = "unbiased",
-                       plot = TRUE,
-                       print = TRUE,
                        color_empirical = "#e15759",
                        shape_empirical = 16,
                        color_bootstrap = "#4e79a7",
@@ -119,9 +110,6 @@ ggdescdist <- function(data,
         ((n + 1) * gamma2 - 3 * (n - 1)) + 3
       return(unbiased.kurtosis)
     }
-    standdev <- function(data) {
-      stats::sd(data)
-    }
   } else if (method == "sample") {
     skewness <- function(data) {
       sd <- sqrt(moment(data, 2))
@@ -131,27 +119,12 @@ ggdescdist <- function(data,
       var <- moment(data, 2)
       return(moment(data, 4) / var ^ 2)
     }
-    standdev <- function(data) {
-      sqrt(moment(data, 2))
-    }
   } else
     stop("The only possible value for the argument method are 'unbiased' or 'sample'")
 
-  res <- list(
-    min = min(data),
-    max = max(data),
-    median = stats::median(data),
-    mean = mean(data),
-    sd = standdev(data),
-    skewness = skewness(data),
-    kurtosis = kurtosis(data),
-    method = method
-  )
+  skewdata <- skewness(data)
+  kurtdata <- kurtosis(data)
 
-  skewdata <- res$skewness
-  kurtdata <- res$kurtosis
-
-  if (plot) {
     if (!is.null(boot)) {
       if (!is.numeric(boot) || boot < 10) {
         stop("boot must be NULL or an integer above 10")
@@ -534,11 +507,5 @@ ggdescdist <- function(data,
         legend.spacing.y = ggplot2::unit(0, "pt")
       )
 
-    print(plot)
-  }
-
-  if (!print)
-    invisible(structure(res, class = "descdist"))
-  else
-    structure(res, class = "descdist")
+    return(plot)
 }
